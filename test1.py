@@ -1,52 +1,109 @@
+'''
+    A doc string that explains it all, but does it?
+'''
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import os
-
-chromedriverLocation = ".\\resources\\chromedriver.exe"
-Cef3Location = ".\\CEF3_1547\\Release\\cefclient.exe"
-
-test_url = "http://www.python.org"
-
-def testChrome():
-	chromedriver = chromedriverLocation
-	os.environ["webdriver.chrome.driver"] = chromedriver
-	driver = webdriver.Chrome(chromedriver)
-
-	driver.get(test_url)
-	test(driver)
+import sys
 
 
-def testFirefox():
-	driver = webdriver.Firefox()
-	driver.get(test_url)
-	test(driver)
+CHROMEDRIVERLOCATION = ".\\resources\\chromedriver.exe"
+CEF3LOCATION = ".\\CEF3_1547\\Release\\cefclient.exe"
+BRACKETSLOCATION = ".\\browser\\VisuUI.exe"
+
+TEST_URL = "http://www.python.org"
 
 
-def testCef():
-	chrome_options = Options()
-	chrome_options.add_argument("--disable-extensions")
-	chrome_options.add_argument("--url=" + test_url)
-	chrome_options.binary_location = Cef3Location
+def test_chrome():
+    '''
+        useless docstring
+    '''
+    print "setting up CHROME"
+    chromedriver = CHROMEDRIVERLOCATION
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver)
 
-	chromedriver = chromedriverLocation
-	os.environ["webdriver.chrome.driver"] = chromedriver
-	driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
-	test(driver)
+    driver.get(TEST_URL)
+    test(driver)
+
+
+def test_firefox():
+    '''
+        useless docstring
+    '''
+    print "setting up FIREFOX"
+    driver = webdriver.Firefox()
+    driver.get(TEST_URL)
+    test(driver)
+
+
+def test_cef():
+    '''
+        useless docstring
+    '''
+    print "setting up CEF"
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--url=" + TEST_URL)
+    chrome_options.binary_location = CEF3LOCATION
+
+    chromedriver = CHROMEDRIVERLOCATION
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+    test(driver)
+
+def test_brackets():
+    '''
+        useless docstring
+    '''
+    print "setting up CEF"
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--url=" + TEST_URL)
+    chrome_options.add_argument("--remote-debugging-port=" + "9234")
+    chrome_options.binary_location = BRACKETSLOCATION
+
+    chromedriver = CHROMEDRIVERLOCATION
+    os.environ["webdriver.chrome.driver"] = chromedriver
+    driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
+    test(driver)
+
 
 def test(driver):
-	assert "Python" in driver.title
-	elem = driver.find_element_by_name("q")
-	elem.send_keys("selenium")
-	elem.send_keys(Keys.RETURN)
-	assert "Google" in driver.title
-	driver.close()
+    '''
+        useless docstring
+    '''
+    assert "Python" in driver.title
+    elem = driver.find_element_by_name("q")
+    elem.send_keys("selenium")
+    elem.send_keys(Keys.RETURN)
+    assert "Google" in driver.title
+    driver.close()
 
-	print "Closed driver and finished"
-	pass
+    print "Closed driver and finished"
 
 
 if __name__ == '__main__':
-	testCef()
+    
+    NUMARGUMENTS = len(sys.argv)
+    BROWSER = "firefox"
 
+    print str(sys.argv)
 
+    if(NUMARGUMENTS == 2):
+        BROWSER = sys.argv[1]
+        
+        if BROWSER == "firefox":
+            test_firefox()
+        elif BROWSER == "chrome":
+            test_chrome()
+        elif BROWSER == "cef":
+            test_cef()
+        elif BROWSER == "brackets":
+            test_brackets()
+        else:
+            print "didn't recognise browser: " + BROWSER
+    else:
+        print "Called me wrong"
