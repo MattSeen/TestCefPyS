@@ -9,9 +9,9 @@ import os
 import sys
 
 
-CHROMEDRIVERLOCATION = ".\\resources\\chromedriver.exe"
-CEF3LOCATION = ".\\CEF3_1547\\Release\\cefclient.exe"
-BRACKETSLOCATION = ".\\browser\\VisuUI.exe"
+CHROME_DRIVER_LOCATION = ".\\resources\\chromedriver.exe"
+CEF3_LOCATION = ".\\CEF3_1547\\Release\\cefclient.exe"
+BRACKETS_LOCATION = ".\\brackets_shell\\brackets.exe"
 
 TEST_URL = "http://www.python.org"
 
@@ -21,7 +21,7 @@ def test_chrome():
         useless docstring
     '''
     print "setting up CHROME"
-    chromedriver = CHROMEDRIVERLOCATION
+    chromedriver = CHROME_DRIVER_LOCATION
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver)
 
@@ -47,12 +47,14 @@ def test_cef():
     chrome_options = Options()
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--url=" + TEST_URL)
-    chrome_options.binary_location = CEF3LOCATION
+    chrome_options.add_argument("--start-maximized")
+    chrome_options.binary_location = CEF3_LOCATION
 
-    chromedriver = CHROMEDRIVERLOCATION
+    chromedriver = CHROME_DRIVER_LOCATION
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
     test(driver)
+
 
 def test_brackets():
     '''
@@ -62,14 +64,14 @@ def test_brackets():
     chrome_options = Options()
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--url=" + TEST_URL)
-    chrome_options.add_argument("--remote-debugging-port=" + "9234")
-    chrome_options.binary_location = BRACKETSLOCATION
+    # chrome_options.add_argument("--remote-debugging-port=" + "9234")
+    chrome_options.add_argument("--fullscreen-enabled")
+    chrome_options.binary_location = BRACKETS_LOCATION
 
-    chromedriver = CHROMEDRIVERLOCATION
+    chromedriver = CHROME_DRIVER_LOCATION
     os.environ["webdriver.chrome.driver"] = chromedriver
     driver = webdriver.Chrome(chromedriver, chrome_options=chrome_options)
     test(driver)
-
 
 def test(driver):
     '''
